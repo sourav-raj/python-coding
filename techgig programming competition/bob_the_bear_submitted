@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+# Indentation: Jupyter Notebook
+
+'''
+Bob the bear problem
+'''
+
+__version__ = 1.0
+__author__ = "Sourav Raj"
+__author_email__ = "souravraj.iitbbs@gmail.com"
+
+N = 5
+ln = [2,4,4,2,4]
+dl = [1,4,1,6,4]
+
+N = input()
+ln=[int(x) for x in input().split()]
+dl=[int(x) for x in input().split()]
+
+len_mat = max([x + y for x, y in zip(ln, dl)])
+
+fish_mat=[]
+for i in range(N):
+    fish_row =[]
+    for j in range(len_mat):
+        if dl[i] <= j<= ln[i]+dl[i]-1:
+            fish_row.append(1)
+        else:
+            fish_row.append(0)
+    fish_mat.append(fish_row)
+
+def col_add(mat):
+    sm = [sum(x) for x in zip(*mat)]
+    max_ind = [i for i in range(0,len(sm)) if sm[i] == max(sm)]
+    return sm, max_ind
+
+col_list_sm, max_list_ind = col_add(fish_mat)
+
+def score_find(mat, max_ind, col_sm):
+    ind = [i for i in range(len(mat)) if mat[i][max_ind]==1]
+    for x in ind:
+        mat[x]=[0]*len(mat[0])
+    sm, max_ind_list = col_add(mat)
+    final_sm = max(sm) + col_sm
+    return final_sm
+
+def optimal_score(fish_mat, max_list_ind, col_list_sm):
+    score =[]
+    for i in range(len(max_list_ind)):
+        mat=fish_mat.copy()
+        score.append(score_find(mat, max_list_ind[i], col_list_sm[max_list_ind[i]]))
+    return max(score)
+
+if __name__ == "__main__": 
+    score = optimal_score(fish_mat, max_list_ind, col_list_sm)
+    print(score)

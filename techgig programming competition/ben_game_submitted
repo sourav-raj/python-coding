@@ -1,0 +1,113 @@
+# -*- coding: utf-8 -*-
+# Indentation: Jupyter Notebook
+
+'''
+Ben game problem
+'''
+
+__version__ = 1.0
+__author__ = "Sourav Raj"
+__author_email__ = "souravraj.iitbbs@gmail.com"
+
+def find_score(x):
+    final_list=[]
+    for i in range(len(x)):
+        sum_row=0
+        row=[]
+        for j in range(len(x[0])):
+            sum_row = sum_row + x[i][j]
+            row.append(x[i][j])
+        row.append(sum_row)
+        if sum_row!=0:
+            final_list.append(row)
+    return final_list
+
+def min_score(x):
+    score =[]
+    for i in range(len(x)):
+        score.append(x[i][len(x[i])-1])
+    min_score=min(score)
+    col=[]
+    for i in range(len(x[0])):
+        col_sum=0
+        for j in range(len(x)):
+            col_sum=col_sum+x[j][i]
+        col.append(col_sum)
+    x.append(col)
+    same_min=[]
+    init_level=[]
+    for j in range(len(x)-1):
+        max_drop=0
+        if min_score==x[j][len(x[j])-1]:
+            for k in range(len(x[j])-1):
+                if x[j][k]==1:
+                    for l in range(len(x)-1):
+                        max_drop=max_drop+x[l][k]
+        same_min.append(max_drop)
+    init_level=x[same_min.index(max(same_min))].copy()
+    return init_level
+
+# drop column
+def drop_col(y1, z):   
+    for i in range(len(y1)):
+        for j in range(len(y1[i])):
+            if z[j]>0:
+                y1[i][j]=0
+        del y1[i][len(y1[i])-1]
+    return y1
+
+def final_sum_score(y):
+    sum_col=0
+    for i in range(len(y)):
+        sum_col = sum_col + y[i][len(y[i])-1]
+    return sum_col
+
+def optimum_cost(mat):
+    cost=0
+    final_score_sum=1
+    while(final_score_sum !=0):
+        y= find_score(mat).copy()
+        if(len(y)==0):
+            break
+        z = min_score(y).copy()
+        cost = cost + pow(z[len(z)-1],2)
+        final_score_sum = final_sum_score(y)
+        mat = drop_col(y, z).copy()
+        
+    return cost
+def main(matrix, N, M):
+    if (0<N<21 and 0<M<21):
+        cost = optimum_cost(matrix)
+        return cost
+   
+
+def main(matrix, N, M, flag):
+    if(flag==1):
+        return
+    if (0<N<21 and 0<M<21):
+        cost = optimum_cost(matrix)
+        return cost
+    
+x = input().split()
+if int(x[0])<21:
+    N = int(x[0])
+if int(x[1])<21:
+    M = int(x[1])
+tempW = []
+
+for x in range(N):
+    tempW.append(input())
+    
+matrix = []
+flag=0
+for x in tempW:
+    mat=[]
+    for j in x:
+        if (int(j)==0 or int(j)==1):
+            mat.append(int(j))
+        else:
+            flag=1
+    matrix.append(mat)
+
+if __name__ == "__main__": 
+    print(main(matrix, N, M, flag))
