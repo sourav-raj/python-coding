@@ -13,19 +13,13 @@ __author_email__ = "souravraj.iitbbs@gmail.com"
 
 import sys
 
-sys.path.append('./')
-
-from polygon.operatorOverloading import Point
-
-a=Point(1,1)
-
-a.plot()
-
-b=Point(2,3)
+sys.path.append(r'G:\PythonProjects\python\classes\classAndObjectBasics')
 
 
-c= a+b
-print(str(c))
+from polygon.inheritenseClass import Square
 
-d=a+5
-print(str(d))
+square = Square(50, 'blue', 20)
+print(square.name, square.sides)
+
+square.draw()
+

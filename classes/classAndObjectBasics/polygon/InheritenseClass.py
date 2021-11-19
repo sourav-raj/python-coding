@@ -14,7 +14,7 @@ __author_email__ = "souravraj.iitbbs@gmail.com"
 import sys
 import turtle
 
-sys.path.append('./')
+sys.path.append(r'G:\PythonProjects\python\classes\classAndObjectBasics')
 
 from polygon.polygon import Polygon
 

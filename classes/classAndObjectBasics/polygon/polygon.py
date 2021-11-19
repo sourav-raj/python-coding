@@ -23,9 +23,10 @@ class Polygon:
 
     def draw(self):
         for i in range(self.size):
+            turtle.color(self.color)
+            turtle.pensize(self.linewidth)
             turtle.forward(100)
             turtle.right(180-self.angle)
+        turtle.done()
 
-square = Polygon(4, 'square')
-print(square.name, square.sides)
 
