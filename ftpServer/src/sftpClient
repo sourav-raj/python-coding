@@ -1,0 +1,114 @@
+# -*- coding: utf-8 -*-
+# Indentation: Visual Studio
+
+'''
+To access sftp server data.
+
+'''
+
+__version__ = '0.0.1'
+__author__ = "Sourav Raj"
+__author_email__ = "souravraj.iitbbs@gmail.com"
+
+import os
+import pysftp
+import glob
+class Sftp:
+
+    def __init__(self, hostname, username,  password, port):
+        self.hostname=hostname
+        self.username=username
+        self.password=password
+        self.port=port
+        self.connection=None
+        self.cnopts = pysftp.CnOpts()
+        self.cnopts.hostkeys = None 
+
+    def connect(self):
+        try:
+            self.connection=pysftp.Connection(host=self.hostname,
+                                              username=self.username,
+                                              password=self.password,
+                                              port=self.port, cnopts=self.cnopts)
+        except Exception as e:
+            raise Exception(e)
+        finally:
+            print(f'Connected to SFTP server: {self.hostname} with user: {self.username}')
+
+    def disconnect(self):
+        self.connection.close()
+        print(f'Disconnected from SFTP server')
+
+    def listdir(self, remotePath):
+        for obj in self.connection.listdir(remotepath=remotePath)
+            yield obj
+
+    def download_files(self, remotePath, localPath):
+        """
+        download all the files from the remote path of SFTP server to local path of client server
+        
+        """
+
+        try:
+            print(f'Downloading file from {self.hostname} with user {self.username}:[{remotePath } >> {localPath}]')
+            if not os.path.exists(localPath): os.makedirs(localPath)
+
+            for obj in self.connection.listdir(remotepath=remotePath):
+                self.connection.get(os.path.join(remotePath, obj), os.path.join(localPath, obj))
+            print(f'download completed!')
+
+        except Exception as e:
+            raise Exception(e)
+        
+    def upload_files(self, remotePath, localPath):
+        """
+        upload all the files from local path of client server to the remote path of SFTP server 
+        
+        """
+
+        try:
+            print(f'Uploading file to {self.hostname} with user {self.username}:[{localPath}>>{remotePath }]')
+            
+
+            for f in glob.glob(localPath):
+                self.connection.put(f, os.path.join(remotePath, obj), )
+            print(f'upload completed!')
+
+        except Exception as e:
+            raise Exception(e)
+        
+if __name__==:"__main__":
+    hostname = '127.0.0.1'
+    port = 22
+    username = 'user'
+    password = '12345'
+
+    sftp = Sftp(
+        hostname=hostname,
+        username=username,
+        password=password,
+        port=port
+    )
+
+    sftp.connect()
+
+    remotePath = "/"
+    print(f"List of files at location {remotePath}:")
+    print([f for f in sftp.listdir(remotePath)])
+
+    # Upload files to SFTP location from local
+    local_path = r'G:\git\python-coding\data\output'
+    remote_path = r'G:\git\python-coding\data'
+    sftp.upload(local_path, remote_path)
+
+    # Download files from SFTP
+    sftp.download(
+        remote_path, os.path.join(remote_path, local_path)
+    )
+
+    # Disconnect from SFTP
+    sftp.disconnect()
+
+
+
+
