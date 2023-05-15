@@ -40,7 +40,7 @@ class Sftp:
         print(f'Disconnected from SFTP server')
 
     def listdir(self, remotePath):
-        for obj in self.connection.listdir(remotepath=remotePath)
+        for obj in self.connection.listdir(remotepath=remotePath):
             yield obj
 
     def download_files(self, remotePath, localPath):
@@ -71,13 +71,13 @@ class Sftp:
             
 
             for f in glob.glob(localPath):
-                self.connection.put(f, os.path.join(remotePath, obj), )
+                self.connection.put(f, os.path.join(remotePath, f), )
             print(f'upload completed!')
 
         except Exception as e:
             raise Exception(e)
         
-if __name__==:"__main__":
+if __name__=="__main__":
     hostname = '127.0.0.1'
     port = 22
     username = 'user'
